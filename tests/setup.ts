@@ -1,9 +1,13 @@
-import { config } from 'dotenv';
+// Load test environment variables BEFORE any imports
+process.env.DATABASE_URL = 'file:./test.db';
+process.env.JWT_SECRET = 'test-secret-key-minimum-32-characters-long';
+process.env.JWT_EXPIRES_IN = '1d';
+process.env.PORT = '3001';
+process.env.NODE_ENV = 'test';
+process.env.LOG_LEVEL = 'silent';
+
 import { execSync } from 'child_process';
 import prisma from '../src/config/database';
-
-// Load test environment variables
-config({ path: '.env.test' });
 
 // Setup test database before all tests
 beforeAll(async () => {
@@ -14,7 +18,15 @@ beforeAll(async () => {
       stdio: 'ignore',
     });
   } catch (error) {
-    console.error('Failed to run migrations:', error);
+    // First time, need to create migration
+    try {
+      execSync('npx prisma migrate dev --name init', {
+        env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL },
+        stdio: 'ignore',
+      });
+    } catch (e) {
+      console.error('Failed to run migrations:', e);
+    }
   }
 });
 

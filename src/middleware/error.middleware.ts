@@ -62,7 +62,7 @@ export async function errorHandler(
   }
 
   // Handle Fastify validation errors
-  if (error.validation) {
+  if ('validation' in error && error.validation) {
     return reply.status(400).send({
       success: false,
       error: {
@@ -74,7 +74,7 @@ export async function errorHandler(
   }
 
   // Handle JWT errors
-  if (error.statusCode === 401) {
+  if ('statusCode' in error && error.statusCode === 401) {
     return reply.status(401).send({
       success: false,
       error: {

@@ -1,13 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
+import { UnauthorizedError } from './error.middleware';
 
-export class UnauthorizedError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'UnauthorizedError';
-  }
-}
-
-export async function authenticateRequest(request: FastifyRequest, reply: FastifyReply) {
+export async function authenticateRequest(request: FastifyRequest, _reply: FastifyReply) {
   try {
     await request.jwtVerify();
   } catch (error) {

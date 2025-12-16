@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { AuthService } from './auth.service';
-import { RegisterInput, LoginInput, registerSchema, loginSchema } from './auth.schemas';
+import { registerSchema, loginSchema } from './auth.schemas';
 import { env } from '../../config/env';
 
 export class AuthController {

@@ -9,8 +9,10 @@ describe('Tasks Module', () => {
 
   beforeAll(async () => {
     app = await buildApp();
+  });
 
-    // Register and login first user
+  beforeEach(async () => {
+    // Register and login first user for each test
     const registerResponse = await app.inject({
       method: 'POST',
       url: '/api/auth/register',
@@ -130,13 +132,21 @@ describe('Tasks Module', () => {
         method: 'POST',
         url: '/api/tasks',
         headers: { authorization: `Bearer ${authToken}` },
-        payload: { title: 'Task 1', completed: false },
+        payload: { title: 'Task 1' },
       });
-      await app.inject({
+      // Create a completed task by updating it
+      const taskResponse = await app.inject({
         method: 'POST',
         url: '/api/tasks',
         headers: { authorization: `Bearer ${authToken}` },
-        payload: { title: 'Task 2', completed: true },
+        payload: { title: 'Task 2' },
+      });
+      const task2 = JSON.parse(taskResponse.body);
+      await app.inject({
+        method: 'PUT',
+        url: `/api/tasks/${task2.data.id}`,
+        headers: { authorization: `Bearer ${authToken}` },
+        payload: { completed: true },
       });
     });
 

@@ -5,6 +5,11 @@ export interface JwtPayload {
   email: string;
 }
 
-export interface AuthenticatedRequest extends FastifyRequest {
-  user: JwtPayload;
+// Extend @fastify/jwt types
+declare module '@fastify/jwt' {
+  interface FastifyJWT {
+    user: JwtPayload;
+  }
 }
+
+export type AuthenticatedRequest = FastifyRequest;
