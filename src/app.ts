@@ -85,6 +85,16 @@ export async function buildApp() {
   await fastify.register(usersRoutes, { prefix: '/api/users' });
   await fastify.register(tasksRoutes, { prefix: '/api/tasks' });
 
+  // Root route
+  fastify.get('/', async () => {
+    return {
+      message: 'REST API - Users & Tasks',
+      version: '1.0.0',
+      documentation: '/docs',
+      health: '/health',
+    };
+  });
+
   // Health check endpoint
   fastify.get('/health', async () => {
     return { status: 'ok', timestamp: new Date().toISOString() };
