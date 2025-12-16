@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: restapi-postgres
+    environment:
+      POSTGRES_USER: restapi
+      POSTGRES_PASSWORD: restapi_password
+      POSTGRES_DB: restapi
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - restapi-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U restapi']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: restapi-app
+    environment:
+      DATABASE_URL: postgresql://restapi:restapi_password@postgres:5432/restapi
+      JWT_SECRET: super-secret-jwt-key-change-in-production-min-32-chars
+      JWT_EXPIRES_IN: 7d
+      PORT: 3000
+      NODE_ENV: production
+      LOG_LEVEL: info
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - restapi-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  restapi-network:
+    driver: bridge
