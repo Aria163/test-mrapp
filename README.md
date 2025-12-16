@@ -101,66 +101,35 @@ This project implements a comprehensive REST API that allows users to register, 
 - **PostgreSQL**: Version 14 or higher (or use Docker)
 - **npm**: Version 8 or higher
 
-## 📦 Installation
+## 📦 Quick Start
 
-### 1. Clone the Repository
+For detailed setup instructions, see [SETUP_GUIDE.md](./SETUP_GUIDE.md).
+
+### Quick Installation
 
 ```bash
+# 1. Clone the repository
 git clone https://github.com/Aria163/test-mrapp.git
 cd test-mrapp
-```
 
-### 2. Install Dependencies
-
-```bash
+# 2. Install dependencies
 npm install
-```
 
-### 3. Setup Environment Variables
-
-Create a `.env` file in the root directory:
-
-```bash
+# 3. Setup environment
 cp .env.example .env
-```
+# Edit .env and set JWT_SECRET (min 32 characters)
 
-Edit `.env` with your configuration:
-
-```env
-DATABASE_URL="postgresql://user:password@localhost:5432/restapi"
-JWT_SECRET="your-very-secure-secret-key-at-least-32-characters"
-JWT_EXPIRES_IN="7d"
-PORT=3000
-NODE_ENV="development"
-LOG_LEVEL="info"
-```
-
-**⚠️ Important**: Make sure `JWT_SECRET` is at least 32 characters long for security.
-
-### 4. Setup Database
-
-#### Option A: Using Docker (Recommended)
-
-Start PostgreSQL with Docker Compose:
-
-```bash
-docker-compose up -d postgres
-```
-
-#### Option B: Using Local PostgreSQL
-
-Install PostgreSQL locally and create a database:
-
-```sql
-CREATE DATABASE restapi;
-```
-
-### 5. Run Database Migrations
-
-```bash
+# 4. Setup database
 npm run prisma:generate
 npm run prisma:migrate
+
+# 5. Start development server
+npm run dev
 ```
+
+The API will be available at http://localhost:3000
+
+📚 **API Documentation**: http://localhost:3000/docs
 
 ## 🏃 Running the Application
 
@@ -259,110 +228,32 @@ Authorization: Bearer <your-token-here>
 
 ## 🔍 API Examples
 
-### Register a New User
+For complete API examples with all endpoints, see [API_EXAMPLES.md](./API_EXAMPLES.md).
 
+### Quick Examples
+
+**Register:**
 ```bash
 curl -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "securepassword123"
-  }'
+  -d '{"email":"user@example.com","password":"password123"}'
 ```
 
-Response:
-```json
-{
-  "success": true,
-  "data": {
-    "user": {
-      "id": 1,
-      "email": "user@example.com",
-      "createdAt": "2024-01-15T10:30:00.000Z",
-      "updatedAt": "2024-01-15T10:30:00.000Z"
-    },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  }
-}
-```
-
-### Login
-
-```bash
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "securepassword123"
-  }'
-```
-
-### Create a Task
-
+**Create Task:**
 ```bash
 curl -X POST http://localhost:3000/api/tasks \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN" \
-  -d '{
-    "title": "Buy groceries",
-    "description": "Milk, bread, eggs"
-  }'
+  -d '{"title":"Buy groceries","description":"Milk, bread, eggs"}'
 ```
 
-Response:
-```json
-{
-  "success": true,
-  "data": {
-    "id": 1,
-    "title": "Buy groceries",
-    "description": "Milk, bread, eggs",
-    "completed": false,
-    "userId": 1,
-    "createdAt": "2024-01-15T10:35:00.000Z",
-    "updatedAt": "2024-01-15T10:35:00.000Z"
-  }
-}
-```
-
-### Get All Tasks
-
+**Get All Tasks:**
 ```bash
-curl -X GET http://localhost:3000/api/tasks \
+curl http://localhost:3000/api/tasks \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-### Get Tasks Filtered by Status
-
-```bash
-curl -X GET "http://localhost:3000/api/tasks?completed=false" \
-  -H "Authorization: Bearer YOUR_TOKEN"
-```
-
-### Update a Task
-
-```bash
-curl -X PUT http://localhost:3000/api/tasks/1 \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -d '{
-    "completed": true
-  }'
-```
-
-### Delete a Task
-
-```bash
-curl -X DELETE http://localhost:3000/api/tasks/1 \
-  -H "Authorization: Bearer YOUR_TOKEN"
-```
-
-### Get User Profile
-
-```bash
-curl -X GET http://localhost:3000/api/users/me \
-  -H "Authorization: Bearer YOUR_TOKEN"
-```
+See [API_EXAMPLES.md](./API_EXAMPLES.md) for all endpoints and detailed examples.
 
 ## 🛡 Security Features
 

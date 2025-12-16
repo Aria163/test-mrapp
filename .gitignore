@@ -18,6 +18,12 @@ build/
 coverage/
 .nyc_output/
 
+# Test build artifacts
+tests/**/*.js
+tests/**/*.d.ts
+tests/**/*.js.map
+tests/**/*.d.ts.map
+
 # Logs
 logs/
 *.log
