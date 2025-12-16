@@ -373,6 +373,16 @@ curl -X GET http://localhost:3000/api/users/me \
 - **Error Sanitization**: Sensitive information not exposed in error messages
 - **CORS Configuration**: Configurable CORS for API security
 
+### Security Considerations for Production
+
+While this implementation includes many security best practices, consider adding the following for production use:
+
+- **Rate Limiting**: Add `@fastify/rate-limit` to prevent brute-force attacks on authentication endpoints
+- **HTTPS**: Always use HTTPS in production
+- **Helmet**: Add security headers with `@fastify/helmet`
+- **Environment Variables**: Never commit secrets; use proper secret management
+- **Regular Updates**: Keep dependencies updated to patch security vulnerabilities
+
 ## 🔧 Development
 
 ### Linting
